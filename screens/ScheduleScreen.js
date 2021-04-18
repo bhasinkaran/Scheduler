@@ -1,7 +1,8 @@
-import React ,{ useState,useEffect } from 'react';
+import React ,{ useState,useEffect, useContext } from 'react';
 import { StyleSheet,SafeAreaView,ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import CourseList from '../components/CourseList'
-
+import CourseEditScreen from './CourseEditScreen'
+import UserContext from '../UserContext';
 const Banner = ({title}) => (
   <Text style={styles.bannerStyle}>{title|| '[loading...]'}</Text>
 );
@@ -18,8 +19,10 @@ const ScheduleScreen = ({navigation}) => {
     };
     fetchSchedule()
   }, [])
+  const user=useContext(UserContext);
+  const canEdit=user&&user.role=='admin'
   const view = (course) => {
-        navigation.navigate('CourseDetailScreen', { course });
+        navigation.navigate(canEdit ? 'CourseEditScreen' : 'CourseDetailScreen', { course });
       };
   return (
     <SafeAreaView style={styles.container}>
