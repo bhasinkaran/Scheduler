@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet,SafeAreaView,ScrollView, Text, View, TouchableOpacity } from 'react-native';
-const Course = ({course, isDisabled, isSelected, select}) => (
+const Course = ({course, isDisabled, isSelected, select, view}) => (
         <TouchableOpacity style={styles[isSelected ? 'courseButtonSelected' : isDisabled ? 'courseButtonDisabled' : 'courseButton']}
         onPress={()  =>select(course)}
+        onLongPress={() => view(course)}
         >
           <Text style={styles.courseText}>
             {`CS ${getCourseNumber(course)}\n${course.meets}`}
