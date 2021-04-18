@@ -1,26 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React,{ useState,useEffect } from 'react';
+import { StyleSheet,SafeAreaView,ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import CourseList from './components/CourseList'
 
-export default function App() {
+const Banner = ({title}) => (
+  <Text style={styles.bannerStyle}>{title|| '[loading...]'}</Text>
+);
+const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php'
+
+const App = () => {
+  const [schedule, setSchedule] = useState({ title: '', courses: [] });
+  useEffect(()=>{
+    const fetchSchedule = async () => {
+      const response = await fetch(url);
+      if (!response.ok) throw response;
+      const json = await response.json();
+      setSchedule(json);
+    };
+    fetchSchedule()
+  }, [])
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text style={styles.textStyle}>Welcome to my app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+       <Banner title={schedule.title} />
+      <CourseList courses={schedule.courses} />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00f',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textStyle: {
-    color: '#fff',
+  bannerStyle: {
+    color: '#888',
     fontSize: 32,
-  }
+  }, 
 });
+
+export default App;
